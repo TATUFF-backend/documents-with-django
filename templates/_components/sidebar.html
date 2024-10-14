@@ -12,17 +12,15 @@
             <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false"
                aria-controls="ui-basic">
                 <i class="menu-icon fa fa-book"></i>
-                <span class="menu-title">Subjects</span>
+                <span class="menu-title">Harakatlar</span>
                 <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"><a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'main:document_list' %}">Fayllar</a>
                     </li>
                     <li class="nav-item"><a class="nav-link"
-                                            href="pages/ui-features/dropdowns.html">Dropdowns</a></li>
-                    <li class="nav-item"><a class="nav-link"
-                                            href="pages/ui-features/typography.html">Typography</a></li>
+                                            href="{% url 'main:document_create' %}">Qo'shish</a></li>
                 </ul>
             </div>
         </li>
@@ -37,11 +35,10 @@
                 <ul class="nav flex-column sub-menu">
                     {% if request.user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link" href="#"> Profile </a>
-                        <li class="nav-item"><a class="nav-link danger" href="#"> Logout </a>
+                        <li class="nav-item"><a class="nav-link danger" href="{% url 'user:logout' %}"> Logout </a>
                     {% else %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'user:login' %}"> Login </a></li>
                     {% endif %} 
-                    </li>
                 </ul>
             </div>
         </li>

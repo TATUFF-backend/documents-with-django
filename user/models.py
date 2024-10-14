@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-ADMIN, USER = ('Admin', 'User')
-WAITING, CANCELLED, ACCEPTED = (0, 1, 2)
+ADMIN, TEACHER, DEPARTMENT, DEAN, STUDY_HEAD, PRORECTOR  = ('admin', 'teacher', 'department_head', 'dean', 'study_head', 'prorector')
+NO_PROCESS, WAITING, CANCELLED, ACCEPTED = ('no process', 'waiting', 'cancelled', 'accepted')
 
 
 class Faculty(models.Model):
@@ -66,11 +66,15 @@ class Subject(models.Model):
 class User(AbstractUser):
     ROLES_CHOICES = (
         (ADMIN, ADMIN),
-        (USER, USER),
+        (TEACHER, TEACHER),
+        (DEPARTMENT, DEPARTMENT),
+        (DEAN, DEAN),
+        (STUDY_HEAD, STUDY_HEAD),
+        (PRORECTOR, PRORECTOR),
     )
 
     image = models.ImageField(upload_to='users/profile/', null=True, blank=True)
-    role = models.CharField(max_length=10, choices=ROLES_CHOICES)
+    role = models.CharField(max_length=20, choices=ROLES_CHOICES)
     faculty = models.ForeignKey(Faculty, on_delete=models.SET_NULL, null=True, blank=True)
     field = models.ForeignKey(Field, on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -85,19 +89,21 @@ class User(AbstractUser):
 
 class Document(models.Model):
     STATUS_CHOICES = (
-        (WAITING, "Waiting"),
-        (CANCELLED, 'Cancelled'),
-        (ACCEPTED, 'Accepted'),
+        ('waiting', 'Waiting'),
+        ('cancelled', 'Cancelled'),
+        ('accepted', 'Accepted'),
+        (NO_PROCESS, 'No Process'),
     )
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name="Subject")
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="User")
     sillabus_file = models.FileField(upload_to='document/sillabus/')
-    department_head_sign = models.IntegerField(choices=STATUS_CHOICES, default=WAITING)
-    dean_sign = models.IntegerField(choices=STATUS_CHOICES, default=WAITING)
-    study_head_sign = models.IntegerField(choices=STATUS_CHOICES, default=WAITING)
-    study_prorector_sign = models.IntegerField(choices=STATUS_CHOICES, default=WAITING)
+    department_head_sign = models.CharField(max_length=30, choices=STATUS_CHOICES, default=NO_PROCESS)
+    dean_sign = models.CharField(max_length=30, choices=STATUS_CHOICES, default=NO_PROCESS)
+    study_head_sign = models.CharField(max_length=30, choices=STATUS_CHOICES, default=NO_PROCESS)
+    study_prorector_sign = models.CharField(max_length=30, choices=STATUS_CHOICES, default=NO_PROCESS)
+    overall = models.CharField(max_length=30, choices=STATUS_CHOICES, default=NO_PROCESS)
     document_comment = models.TextField(blank=True, null=True)
-    status = models.PositiveIntegerField(default=1)
+    status = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -107,6 +113,21 @@ class Document(models.Model):
     class Meta:
         verbose_name = 'Document'
         verbose_name_plural = 'Documents'
+        ordering = ['-created_at']
+
+    def save(self, *args, **kwargs):
+        if not self.status:
+            if self.department_head_sign == WAITING:
+                self.department_head_sign = NO_PROCESS
+                self.overall = NO_PROCESS
+        elif self.status and self.department_head_sign == NO_PROCESS:
+            self.department_head_sign = WAITING
+            self.overall = WAITING
+        super().save(*args, **kwargs)
+        return self
+
+    def file_name(self):
+        return self.sillabus_file.name.split('/')[-1]
 
 
 class Comment(models.Model):

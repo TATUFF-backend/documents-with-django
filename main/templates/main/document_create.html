@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col d-flex justify-content-between align-items-center mb-3">
+                            <p class="col-6 card-title mb-0">Qo'shish</p>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <form action="{% url 'main:document_create' %}" method="post" enctype="multipart/form-data" class="forms-sample">
+                                    {% csrf_token %}
+
+                                    <div class="form-group">
+                                        <label for="subject">Fan</label>
+                                        {{ form.subject }}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Faylni yuklash: </label>
+                                        {{ form.sillabus_file }}
+                                        <div class="input-group col-xs-12 d-flex align-items-center">
+                                            <input type="text" class="form-control file-upload-info" disabled=""
+                                                   placeholder="Upload Image">
+                                            <span class="input-group-append ms-2">
+                                              <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleTextarea1">Izoh: </label>
+                                        {{ form.document_comment }}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleSelectGender">Status: </label>
+                                        {{ form.status }}
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary me-2">Submit</button>
+                                    <a href="{% url 'main:document_list' %}" class="btn btn-light">Cancel</a>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block customJS %}
+	<script src="{% static 'main/js/file-upload.js' %}"></script>
+{% endblock %}
