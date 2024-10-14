@@ -1,4 +1,4 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from .forms import LoginForm
@@ -29,3 +29,9 @@ class LoginView(View):
                 'title': 'Kirish',
             }
             return render(request, 'user/login.html', context)
+
+
+def logout_user(request):
+    if request.user.is_authenticated:
+        logout(request)
+    return redirect('main:home')

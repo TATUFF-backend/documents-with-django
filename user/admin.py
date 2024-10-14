@@ -48,8 +48,9 @@ class SubjectAdmin(admin.ModelAdmin):
 
 @admin.register(Document)
 class DocumentAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'subject', 'user', 'department_head_sign', 'dean_sign', 'study_head_sign', 'study_prorector_sign', 'status')
+    list_display = ('pk', 'subject', 'user', 'department_head_sign', 'dean_sign', 'study_head_sign', 'study_prorector_sign', 'overall', 'status')
     list_display_links = ('pk', 'subject', )
+    list_editable = ('status', 'department_head_sign', 'dean_sign', 'study_head_sign', 'study_prorector_sign', 'overall')
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
