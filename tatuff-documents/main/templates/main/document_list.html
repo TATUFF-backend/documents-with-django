@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col d-flex justify-content-between align-items-center mb-3">
+                            <p class="col-6 card-title mb-0">Barcha fayllar</p>
+                            <a href="{% url 'main:document_create' %}" class="btn btn-primary">Qo'shish</a>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table id="example" class="display expandable-table" style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Fan</th>
+                                            <th>Kafedra</th>
+                                            <th>Dekan</th>
+                                            <th>O'quv bo'limi</th>
+                                            <th>Prorektor</th>
+                                            <th>Sana</th>
+                                            <th>Holat</th>
+                                            <th>Status</th>
+                                            <th>Amallar</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for document in documents %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td><a href="{% url 'main:document_detail' document.pk %}">{{ document.subject.name }}</a></td>
+                                                <td>
+                                                    {% if document.department_head_sign == 'waiting' %}
+                                                        <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                                    {% elif document.department_head_sign == 'cancelled' %}
+                                                        <span class="badge bg-danger">Rad etildi</span>
+                                                    {% elif document.department_head_sign == 'accepted' %}
+                                                        <span class="badge bg-success">Qabul qilindi</span>
+                                                    {% elif document.department_head_sign == 'no process' %}
+                                                        <span class="badge bg-secondary">Jarayonda emas</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if document.dean_sign == 'waiting' %}
+                                                        <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                                    {% elif document.dean_sign == 'cancelled' %}
+                                                        <span class="badge bg-danger">Rad etildi</span>
+                                                    {% elif document.dean_sign == 'accepted' %}
+                                                        <span class="badge bg-success">Qabul qilindi</span>
+                                                    {% elif document.dean_sign == 'no process' %}
+                                                        <span class="badge bg-secondary">Jarayonda emas</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if document.study_head_sign == 'waiting' %}
+                                                        <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                                    {% elif document.study_head_sign == 'cancelled' %}
+                                                        <span class="badge bg-danger">Rad etildi</span>
+                                                    {% elif document.study_head_sign == 'accepted' %}
+                                                        <span class="badge bg-success">Qabul qilindi</span>
+                                                    {% elif document.study_head_sign == 'no process' %}
+                                                        <span class="badge bg-secondary">Jarayonda emas</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if document.study_prorector_sign == 'waiting' %}
+                                                        <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                                    {% elif document.study_prorector_sign == 'cancelled' %}
+                                                        <span class="badge bg-danger">Rad etildi</span>
+                                                    {% elif document.study_prorector_sign == 'accepted' %}
+                                                        <span class="badge bg-success">Qabul qilindi</span>
+                                                    {% elif document.study_prorector_sign == 'no process' %}
+                                                        <span class="badge bg-secondary">Jarayonda emas</span>
+                                                    {% endif %}
+                                                </td>
+
+                                                <td>{{ document.created_at|date:"M d, Y" }} {{ document.created_at|time:"H:i" }}</td>
+
+                                                <td>
+                                                    {% if document.overall == 'accepted' %}
+                                                        <span class="badge bg-success">Qabul qilindi</span>
+                                                    {% elif document.overall == 'cancelled' %}
+                                                        <span class="badge bg-danger">Rad etildi</span>
+                                                    {% elif document.overall == 'no process' %}
+                                                        <span class="badge bg-secondary">Jarayonda emas</span>
+                                                    {% else  %}
+                                                        <span class="badge bg-warning text-dark">Jarayonda</span>
+
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if document.status == True %}
+                                                        <span class="badge bg-success">Faol</span>
+                                                    {% else  %}
+                                                        <span class="badge bg-secondary text-dark">Faol emas</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td><a href="#" ><i class="fa fa-eye"></i></a> <a href="#"><i class="fa fa-edit"></i></a></td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    {% if not documents %}
+                                    	<h4 class="text-center mt-3">Hech narsa yo'q</h4>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
