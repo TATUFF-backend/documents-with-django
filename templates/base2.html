@@ -9,11 +9,9 @@
     </head>
     <body>
         <div class="container-scroller">
-            <div class="container-fluid page-body-wrapper full-page-wrapper">
-                {% block content %}
-        
-                {% endblock %}
-            </div>
+            {% block content %}
+
+            {% endblock %}
             <!-- page-body-wrapper ends -->
         </div>
         {% include '_components/script.html' %}

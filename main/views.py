@@ -6,11 +6,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from shared.mixins import TeacherMixin
 from user.models import Document, WAITING, CANCELLED, ACCEPTED
 from user.forms import DocumentForm
 
 
-class HomeView(LoginRequiredMixin, View):
+class HomeView(TeacherMixin, View):
     def get(self, request):
         documents = Document.objects.filter(user=request.user)
         waiting_documents = documents.filter(overall=WAITING)
