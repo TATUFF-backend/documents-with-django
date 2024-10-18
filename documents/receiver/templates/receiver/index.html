@@ -45,7 +45,7 @@
                         <div class="card card-light-blue">
                             <div class="card-body">
                                 <p class="mb-4">Barchasi</p>
-                                <p class="fs-30 mb-2">{{ all_docs }} ta</p>
+                                <p class="fs-30 mb-2">{{ statistics.all }} ta</p>
                             </div>
                         </div>
                     </div>
@@ -53,7 +53,7 @@
                         <div class="card" style="background-color: #30c93e">
                             <div class="card-body">
                                 <p class="mb-4">Qabul qilingan</p>
-                                <p class="fs-30 mb-2">{{ statistic.accepted }} ta</p>
+                                <p class="fs-30 mb-2">{{ statistics.accepted }} ta</p>
                             </div>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                         <div class="card" style="background-color: #ffa941">
                             <div class="card-body">
                                 <p class="mb-4">Jarayonda</p>
-                                <p class="fs-30 mb-2">{{ statistic.waiting }} ta</p>
+                                <p class="fs-30 mb-2">{{ statistics.waiting }} ta</p>
                             </div>
                         </div>
                     </div>
@@ -71,7 +71,7 @@
                         <div class="card" style="background-color: #ef353b">
                             <div class="card-body">
                                 <p class="mb-4">Qaytarilgan</p>
-                                <p class="fs-30 mb-2">{{ statistic.cancelled }} ta</p>
+                                <p class="fs-30 mb-2">{{ statistics.cancelled }} ta</p>
                             </div>
                         </div>
                     </div>
@@ -92,7 +92,8 @@
                                             <th>#</th>
                                             <th>FISH</th>
                                             <th>Fakultet</th>
-                                            <th>Yo'nalishi</th>
+                                            <th>Yo'nalish</th>
+                                            <th>Fan</th>
                                             <th>Status</th>
                                             <th>Amal</th>
                                         </tr>
@@ -106,6 +107,7 @@
                                                 <td>{{ document.user.faculty }}</td>
 
                                                 <td>{{ document.user.field }}</td>
+                                                <td>{{ document.subject }}</td>
 
                                                 <td>
                                                     <span class="badge bg-warning text-dark">Kutilmoqda</span>
