@@ -29,6 +29,8 @@ INSTALLED_APPS = [
 
     'main',
     'user',
+    'receiver',
+    'shared',
 
     'django_cleanup',
 ]

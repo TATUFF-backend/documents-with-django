@@ -1,5 +1,9 @@
 from django import forms
-from .models import Document, User, Subject
+from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.db.models.fields.files import FieldFile
+
+from .models import Document, User
 
 
 class LoginForm(forms.ModelForm):
@@ -61,10 +65,17 @@ class DocumentForm(forms.ModelForm):
             'sillabus_file': forms.FileInput(
                 attrs={
                     'class': 'file-upload-default',
-                    'placeholder': "Faylni yuklang",
+                    'placeholder': "Faylni yuklang (*.pdf)",
+                    'accept': ".pdf, .jpg",
                 }
             ),
             'document_comment': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'status': forms.CheckboxInput(attrs={'class': 'form-check-input'})
         }
 
+    def clean_sillabus_file(self):
+        sillabus_file: InMemoryUploadedFile = self.cleaned_data.get('sillabus_file')
+        if type(sillabus_file) is InMemoryUploadedFile:
+            if sillabus_file.content_type != 'application/pdf':
+                raise ValidationError("Faqat PDF formatidagi fayllarni yuklashingiz mumkin.")
+        return sillabus_file
