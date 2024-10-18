@@ -84,7 +84,7 @@ class User(AbstractUser):
     def get_image(self):
         if self.image:
             return self.image.url
-        return False
+        return 'https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3383.jpg'
 
 
 class Document(models.Model):
@@ -113,28 +113,22 @@ class Document(models.Model):
     class Meta:
         verbose_name = 'Document'
         verbose_name_plural = 'Documents'
-        ordering = ['-created_at']
-
-    def save(self, *args, **kwargs):
-        if not self.status:
-            if self.department_head_sign == WAITING:
-                self.department_head_sign = NO_PROCESS
-                self.overall = NO_PROCESS
-        elif self.status and self.department_head_sign == NO_PROCESS:
-            self.department_head_sign = WAITING
-            self.overall = WAITING
-        super().save(*args, **kwargs)
-        return self
+        ordering = ['-updated_at']
 
     def file_name(self):
         return self.sillabus_file.name.split('/')[-1]
 
 
 class Comment(models.Model):
+    STATUS_CHOICES = (
+        ('cancelled', 'Cancelled'),
+        ('accepted', 'Accepted'),
+    )
     document = models.ForeignKey(Document, on_delete=models.CASCADE, verbose_name="Document")
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="User")
     comment = models.TextField(blank=True, null=True)
     file = models.FileField(upload_to='document/comment/', blank=True, null=True)
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='accepted')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

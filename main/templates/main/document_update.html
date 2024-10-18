@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_tags %}
 
 
 {% block content %}
@@ -9,11 +10,11 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="col d-flex justify-content-between align-items-center mb-3">
-                            <p class="col-6 card-title mb-0">Qo'shish</p>
+                            <p class="col-6 card-title mb-0">Tahrirlash</p>
                         </div>
                         <div class="card">
                             <div class="card-body">
-                                <form action="{% url 'main:document_create' %}" method="post"
+                                <form action="{% url 'main:document_update' pk %}" method="post"
                                       enctype="multipart/form-data" class="forms-sample">
                                     {% csrf_token %}
 
@@ -45,6 +46,8 @@
                                         <label>Faylni yuklash: </label>
                                         {{ form.sillabus_file }}
                                         <div class="input-group col-xs-12 d-flex align-items-center">
+                                            <input type="text" class="form-control file-current-info"
+                                                   disabled="" value="{{ form.sillabus_file.value|filename }}">
                                             <input type="text" class="form-control file-upload-info"
                                                    disabled="" placeholder="Faylni yuklang (*.pdf)">
                                             <span class="input-group-append ms-2">

@@ -11,7 +11,7 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = ('faculty', 'role')
 
     def print_image(self, obj):
-        return mark_safe(f'<img src="{obj.get_image()}" width="50" height="50" style="border-radius: 50%;"/>')
+        return mark_safe(f'<img src="{obj.get_image()}" alt="No picture" width="50" height="50" style="border-radius: 50%;"/>')
 
 
     class Meta:
