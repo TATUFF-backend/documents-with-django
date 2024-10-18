@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col d-flex justify-content-between align-items-center mb-3">
+                            <p class="col-6 card-title mb-0">Barcha fayllar</p>
+                            <a href="{% url 'main:document_create' %}" class="btn btn-primary">Qo'shish</a>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    {% include 'main/components/files_table.html' %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
