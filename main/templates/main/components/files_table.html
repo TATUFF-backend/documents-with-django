@@ -1,0 +1,172 @@
+{% load custom_tags %}
+
+
+<table id="example" class="display expandable-table" style="width:100%">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Fan</th>
+        <th>Kafedra</th>
+        <th>Dekan</th>
+        <th>O'quv bo'limi</th>
+        <th>Prorektor</th>
+        <th>Sana</th>
+        <th>Holat</th>
+        <th>Status</th>
+        <th class="sticky-column">Amallar</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    {% for document in documents %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td><a href="{% url 'main:document_detail' document.pk %}">{{ document.subject.name }}</a></td>
+            <td>
+                {% if document.department_head_sign == 'waiting' %}
+                    <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                {% elif document.department_head_sign == 'cancelled' %}
+                    <span class="badge bg-danger">Rad etildi</span>
+                {% elif document.department_head_sign == 'accepted' %}
+                    <span class="badge bg-success">Qabul qilindi</span>
+                {% elif document.department_head_sign == 'no process' %}
+                    <span class="badge bg-secondary">Jarayonda emas</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if document.dean_sign == 'waiting' %}
+                    <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                {% elif document.dean_sign == 'cancelled' %}
+                    <span class="badge bg-danger">Rad etildi</span>
+                {% elif document.dean_sign == 'accepted' %}
+                    <span class="badge bg-success">Qabul qilindi</span>
+                {% elif document.dean_sign == 'no process' %}
+                    <span class="badge bg-secondary">Jarayonda emas</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if document.study_head_sign == 'waiting' %}
+                    <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                {% elif document.study_head_sign == 'cancelled' %}
+                    <span class="badge bg-danger">Rad etildi</span>
+                {% elif document.study_head_sign == 'accepted' %}
+                    <span class="badge bg-success">Qabul qilindi</span>
+                {% elif document.study_head_sign == 'no process' %}
+                    <span class="badge bg-secondary">Jarayonda emas</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if document.study_prorector_sign == 'waiting' %}
+                    <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                {% elif document.study_prorector_sign == 'cancelled' %}
+                    <span class="badge bg-danger">Rad etildi</span>
+                {% elif document.study_prorector_sign == 'accepted' %}
+                    <span class="badge bg-success">Qabul qilindi</span>
+                {% elif document.study_prorector_sign == 'no process' %}
+                    <span class="badge bg-secondary">Jarayonda emas</span>
+                {% endif %}
+            </td>
+
+            <td>{{ document.updated_at|date:"M d, Y" }} {{ document.updated_at|time:"H:i" }}</td>
+
+            <td>
+                {% if document.overall == 'accepted' %}
+                    <span class="badge bg-success">Qabul qilindi</span>
+                {% elif document.overall == 'cancelled' %}
+                    <span class="badge bg-danger">Rad etildi</span>
+                {% elif document.overall == 'no process' %}
+                    <span class="badge bg-secondary">Jarayonda emas</span>
+                {% else %}
+                    <span class="badge bg-warning text-dark">Jarayonda</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if document.status == True %}
+                    <span class="badge bg-success">Faol</span>
+                {% else %}
+                    <span class="badge bg-secondary text-dark">Faol emas</span>
+                {% endif %}
+            </td>
+            <td class="sticky-column">
+                <a href="{% url 'main:document_detail' document.pk %}">
+                    <i class="fa fa-eye"></i>
+                </a>
+                {% if not document.overall == 'accepted' %}
+                    <a href="{% url 'main:document_update' document.pk %}">
+                        <i class="fa fa-edit text-warning"></i>
+                    </a>
+                    <a data-bs-toggle="modal" data-bs-target="#document-{{ document.pk }}">
+                        <i class="fa fa-trash text-danger"></i>
+                    </a>
+                {% endif %}
+            </td>
+
+            <!-- Modal -->
+            <div class="modal fade" id="document-{{ document.pk }}" tabindex="-1" aria-labelledby="documentLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="documentLabel">O'chirilsinmi?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>
+                                <strong>
+                                    Fan:
+                                </strong>
+                                {{ document.subject }}
+                            </p>
+                            <p>
+                                <strong>
+                                    Fayl:
+                                </strong>
+                                {{ document.sillabus_file|filename }}
+                            </p>
+                            <p>
+                                <strong>
+                                    Holat:
+                                </strong>
+                                {% if document.overall == 'accepted' %}
+                                    <span class="badge bg-success">Qabul qilindi</span>
+                                {% elif document.overall == 'cancelled' %}
+                                    <span class="badge bg-danger">Rad etildi</span>
+                                {% elif document.overall == 'no process' %}
+                                    <span class="badge bg-secondary">Jarayonda emas</span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">Jarayonda</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Yo'q</button>
+                            <a href="{% url 'main:document_delete' document.pk %}" class="btn btn-danger">Ha</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% if not documents %}
+    <h4 class="text-center mt-3">Hech narsa yo'q</h4>
+{% endif %}
+
+
+<style>
+.sticky-column {
+    position: sticky;
+    right: 0;
+    background-color: #fff;
+    z-index: 2;
+    box-shadow: -1px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .sticky-column {
+        min-width: 80px;
+    }
+}
+
+</style>

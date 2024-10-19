@@ -1,0 +1,46 @@
+{% load static %}
+
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <ul class="nav">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'main:home' %}">
+                <i class="icon-grid menu-icon"></i>
+                <span class="menu-title">Dashboard</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false"
+               aria-controls="ui-basic">
+                <i class="menu-icon fa fa-book"></i>
+                <span class="menu-title">Harakatlar</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'main:document_list' %}">Fayllar</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link"
+                                            href="{% url 'main:document_create' %}">Qo'shish</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false"
+               aria-controls="auth">
+                <i class="icon-head menu-icon"></i>
+                <span class="menu-title">User Pages</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="auth">
+                <ul class="nav flex-column sub-menu">
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href="#"> Profile </a>
+                        <li class="nav-item"><a class="nav-link danger" href="{% url 'user:logout' %}"> Logout </a>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'user:login' %}"> Login </a></li>
+                    {% endif %} 
+                </ul>
+            </div>
+        </li>
+    </ul>
+</nav>

@@ -1,0 +1,135 @@
+{% extends 'base2.html' %}
+{% load static %}
+
+{% block content %}
+    {% include 'receiver_components/navbar.html' %}
+    <div class="container-fluid page-body-wrapper">
+        {% include 'receiver_components/sidebar.html' %}
+        <div class="main-panel">
+            <div class="content-wrapper">
+        <div class="row">
+            <div class="col-md-12 grid-margin">
+                <div class="row">
+                    <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                        <h3 class="font-weight-bold">Salom, {{ request.user.get_full_name }}</h3>
+                        <h6 class="font-weight-normal mb-0">
+                            <span class="text-primary">{{ notification }}</span>
+                        </h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 grid-margin stretch-card">
+                <div class="card tale-bg">
+                    <div class="card-people mt-auto">
+                        <img src="{% static 'main/images/dashboard/people.svg' %}" alt="people">
+                        <div class="weather-info">
+                            <div class="d-flex">
+                                <div>
+                                    <h2 class="mb-0 font-weight-normal"><i
+                                            class="icon-sun me-2"></i>31<sup>C</sup></h2>
+                                </div>
+                                <div class="ms-2">
+                                    <h4 class="location font-weight-normal">Farg'ona</h4>
+                                    <h6 class="font-weight-normal">O'zbekiston</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 grid-margin transparent">
+                <div class="row">
+                    <div class="col-md-6 mb-4 stretch-card transparent">
+                        <div class="card card-light-blue">
+                            <div class="card-body">
+                                <p class="mb-4">Barchasi</p>
+                                <p class="fs-30 mb-2">{{ statistics.all }} ta</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4 stretch-card transparent">
+                        <div class="card" style="background-color: #30c93e">
+                            <div class="card-body">
+                                <p class="mb-4">Qabul qilingan</p>
+                                <p class="fs-30 mb-2">{{ statistics.accepted }} ta</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-4 mb-lg-0 stretch-card transparent">
+                        <div class="card" style="background-color: #ffa941">
+                            <div class="card-body">
+                                <p class="mb-4">Jarayonda</p>
+                                <p class="fs-30 mb-2">{{ statistics.waiting }} ta</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 stretch-card transparent">
+                        <div class="card" style="background-color: #ef353b">
+                            <div class="card-body">
+                                <p class="mb-4">Qaytarilgan</p>
+                                <p class="fs-30 mb-2">{{ statistics.cancelled }} ta</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-title">Jarayonda...</p>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table id="example" class="display expandable-table" style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>FISH</th>
+                                            <th>Fakultet</th>
+                                            <th>Yo'nalish</th>
+                                            <th>Fan</th>
+                                            <th>Status</th>
+                                            <th>Amal</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for document in waiting_documents %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+
+                                                <td>{{ document.user.first_name }} {{ document.user.last_name }}</td>
+                                                <td>{{ document.user.faculty }}</td>
+
+                                                <td>{{ document.user.field }}</td>
+                                                <td>{{ document.subject }}</td>
+
+                                                <td>
+                                                    <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                                </td>
+                                                <td><a href="#" ><i class="fa fa-eye"></i></a> <a href="#"><i class="fa fa-edit"></i></a></td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    {% if not waiting_documents %}
+                                    	<h4 class="text-center mt-3">Hech narsa yo'q</h4>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+
+    </div>
+    {% include 'receiver_components/footer.html' %}
+{% endblock %}
