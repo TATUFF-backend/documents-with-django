@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import View
 from shared.mixins import ReceiverMixin
 from user.models import (Document, DEPARTMENT, DEAN, PRORECTOR, STUDY_HEAD,
@@ -154,3 +154,13 @@ class ReceiveDocumentView(ReceiverMixin, View):
             'document': document,
         }
         return render(request, 'receiver/receive.html', context)
+
+    def post(self, request, pk):
+        document = get_object_or_404(Document, id=pk)
+        user = request.user
+        comment = request.POST.get('comment')
+        decision = request.POST.get('decision')
+        file_upload = request.FILES.get('fileUpload')
+
+        print(comment)
+

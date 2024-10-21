@@ -120,6 +120,38 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Munosabat bildirish</h4>
+                                <div class="mb-1">
+                                    <form method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            <textarea style="font-size: 16px; padding: 13px" class="form-control" id="comment" name="comment" rows="4" placeholder="Fikringizni yozing..."></textarea>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="fileUpload" class="form-label">Fayl yuklash</label>
+                                            <input style="font-size: 16px;" type="file" class="form-control" id="fileUpload" name="fileUpload">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="decision" class="form-label">Tanlang:</label>
+                                            <select class="form-select" id="decision" name="decision">
+                                                <option value="accept">Qabul qilish</option>
+                                                <option value="reject">Rad etish</option>
+                                            </select>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary">Yuborish</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
