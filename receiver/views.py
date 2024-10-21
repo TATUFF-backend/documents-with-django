@@ -135,3 +135,22 @@ class CancelledPageView(ReceiverMixin, View):
         }
 
         return render(request, "receiver/cancelled.html", context=data)
+
+class DocumentDetailView(ReceiverMixin, View):
+    def get(self, request, pk):
+        document = Document.objects.get(pk=pk)
+        context = {
+            'title': f'{document.subject}',
+            'document': document,
+        }
+        return render(request, 'receiver/detail.html', context)
+
+
+class ReceiveDocumentView(ReceiverMixin, View):
+    def get(self, request, pk):
+        document = Document.objects.get(pk=pk)
+        context = {
+            'title': f'{document.subject}',
+            'document': document,
+        }
+        return render(request, 'receiver/receive.html', context)
