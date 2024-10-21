@@ -1,0 +1,161 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block content %}
+    {% include 'receiver_components/navbar.html' %}
+    <div class="container-fluid page-body-wrapper">
+        {% include 'receiver_components/sidebar.html' %}
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Hujjat Tafsilotlari</h4>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Fan:</strong> {{ document.subject.name }}</p>
+                                <p><strong>Sana:</strong> {{ document.created_at|date:"d-M, Y" }} {{ document.created_at|time:"H:i" }}</p>
+                                <p><strong>Holat:</strong>
+                                    {% if document.overall == 'accepted' %}
+                                        <span class="badge bg-success">Qabul qilindi</span>
+                                    {% elif document.overall == 'cancelled' %}
+                                        <span class="badge bg-danger">Rad etildi</span>
+                                    {% elif document.overall == 'no process' %}
+                                        <span class="badge bg-secondary">Jarayonda emas</span>
+                                    {% else %}
+                                        <span class="badge bg-warning text-dark">Jarayonda</span>
+                                    {% endif %}
+                                </p>
+                                <p><strong>Status:</strong>
+                                    {% if document.status == True %}
+                                        <span class="badge bg-success">Faol</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary text-dark">Faol emas</span>
+                                    {% endif %}
+                                </p>
+                                <p><strong>Fayl:</strong>
+                                    <span class="badge bg-primary">{{ document.sillabus_file|filename }}</span>
+                                </p>
+                                <h5>Sharh:</h5>
+                                <p class="form-control mb-1"
+                                   style="font-size: 16px; line-height: 1.2">{{ document.document_comment }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Kafedra:</strong>
+                                    {% if document.department_head_sign == 'waiting' %}
+                                        <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                    {% elif document.department_head_sign == 'cancelled' %}
+                                        <span class="badge bg-danger">Rad etildi</span>
+                                    {% elif document.department_head_sign == 'accepted' %}
+                                        <span class="badge bg-success">Qabul qilindi</span>
+                                    {% elif document.department_head_sign == 'no process' %}
+                                        <span class="badge bg-secondary">Jarayonda emas</span>
+                                    {% endif %}
+                                </p>
+                                <p><strong>Dekan:</strong>
+                                    {% if document.dean_sign == 'waiting' %}
+                                        <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                    {% elif document.dean_sign == 'cancelled' %}
+                                        <span class="badge bg-danger">Rad etildi</span>
+                                    {% elif document.dean_sign == 'accepted' %}
+                                        <span class="badge bg-success">Qabul qilindi</span>
+                                    {% elif document.dean_sign == 'no process' %}
+                                        <span class="badge bg-secondary">Jarayonda emas</span>
+                                    {% endif %}
+                                </p>
+                                <p><strong>O'quv bo'limi:</strong>
+                                    {% if document.study_head_sign == 'waiting' %}
+                                        <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                    {% elif document.study_head_sign == 'cancelled' %}
+                                        <span class="badge bg-danger">Rad etildi</span>
+                                    {% elif document.study_head_sign == 'accepted' %}
+                                        <span class="badge bg-success">Qabul qilindi</span>
+                                    {% elif document.study_head_sign == 'no process' %}
+                                        <span class="badge bg-secondary">Jarayonda emas</span>
+                                    {% endif %}
+                                </p>
+                                <p><strong>Prorektor:</strong>
+                                    {% if document.study_prorector_sign == 'waiting' %}
+                                        <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                    {% elif document.study_prorector_sign == 'cancelled' %}
+                                        <span class="badge bg-danger">Rad etildi</span>
+                                    {% elif document.study_prorector_sign == 'accepted' %}
+                                        <span class="badge bg-success">Qabul qilindi</span>
+                                    {% elif document.study_prorector_sign == 'no process' %}
+                                        <span class="badge bg-secondary">Jarayonda emas</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                <div class="row">
+                    <div class="col-md-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Faylni ko'rish</h4>
+                                <div class="mb-1">
+                                    <a href="{% url 'main:download_file' document.pk %}" class="btn btn-outline-primary mb-2">
+                                        <i class="fa fa-arrow-down"></i> Yuklab olish
+                                    </a>
+                                    <button onclick="showFile()" class="btn btn-outline-primary mb-2" id="viewButton">
+                                        <i class="fa fa-eye"></i> Ko'rish
+                                    </button>
+                                    <button onclick="openFullscreen()" class="btn btn-outline-primary mb-2" id="fullscreenButton"
+                                            style="display: none;">
+                                        <i class="fa fa-expand"></i> To'liq ekran
+                                    </button>
+                                    <button onclick="hideFile()" class="btn btn-outline-primary mb-2" id="hideButton"
+                                            style="display: none;">
+                                        <i class="fa fa-eye-slash"></i> Berkitish
+                                    </button>
+                                </div>
+                                <div id="file-viewer">Faylni ko'rish uchun "Ko'rish" tugmasini bosing!</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Munosabat bildirish</h4>
+                                <div class="mb-1">
+                                    <form method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            <textarea style="font-size: 16px; padding: 13px" class="form-control" id="comment" name="comment" rows="4" placeholder="Fikringizni yozing..."></textarea>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="fileUpload" class="form-label">Fayl yuklash</label>
+                                            <input style="font-size: 16px;" type="file" class="form-control" id="fileUpload" name="fileUpload">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="decision" class="form-label">Tanlang:</label>
+                                            <select class="form-select" id="decision" name="decision">
+                                                <option value="accept">Qabul qilish</option>
+                                                <option value="reject">Rad etish</option>
+                                            </select>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary">Yuborish</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% include 'receiver_components/footer.html' %}
+
+{% endblock %}
