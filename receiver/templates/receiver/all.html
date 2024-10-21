@@ -39,7 +39,39 @@
                                                         <td>{{ document.subject }}</td>
 
                                                         <td>
-                                                            <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                                            {% if request.user.role == 'prorector' %}
+                                                            	{% if document.study_prorector_sign == 'waiting' %}
+                                                            		<span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                                            	{% elif document.study_prorector_sign == 'cancelled' %}
+                                                                    <span class="badge bg-danger text-dark">Rad etilgan</span>
+                                                                {% elif document.study_prorector_sign == 'accepted' %}
+                                                                    <span class="badge bg-success text-dark">Qabul qilingan</span>
+                                                                {% endif %}
+                                                            {% elif request.user.role == 'study_head' %}
+                                                                {% if document.study_head_sign == 'waiting' %}
+                                                            		<span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                                            	{% elif document.study_head_sign == 'cancelled' %}
+                                                                    <span class="badge bg-danger text-dark">Rad etilgan</span>
+                                                                {% elif document.study_head_sign == 'accepted' %}
+                                                                    <span class="badge bg-success text-dark">Qabul qilingan</span>
+                                                                {% endif %}
+                                                            {% elif request.user.role == 'dean' %}
+                                                                {% if document.dean_sign == 'waiting' %}
+                                                            		<span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                                            	{% elif document.dean_sign == 'cancelled' %}
+                                                                    <span class="badge bg-danger text-dark">Rad etilgan</span>
+                                                                {% elif document.dean_sign == 'accepted' %}
+                                                                    <span class="badge bg-success text-dark">Qabul qilingan</span>
+                                                                {% endif %}
+                                                            {% elif request.user.role == 'department_head' %}
+                                                                {% if document.department_head_sign == 'waiting' %}
+                                                            		<span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                                            	{% elif document.department_head_sign == 'cancelled' %}
+                                                                    <span class="badge bg-danger text-dark">Rad etilgan</span>
+                                                                {% elif document.department_head_sign == 'accepted' %}
+                                                                    <span class="badge bg-success text-dark">Qabul qilingan</span>
+                                                                {% endif %}
+                                                            {% endif %}
                                                         </td>
                                                         <td><a href="#" ><i class="fa fa-eye"></i></a> <a href="#"><i class="fa fa-edit"></i></a></td>
                                                     </tr>

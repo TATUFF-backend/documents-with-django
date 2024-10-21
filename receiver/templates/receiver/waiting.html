@@ -1,0 +1,64 @@
+{% extends 'base2.html' %}
+{% load static %}
+
+{% block content %}
+    {% include 'receiver_components/navbar.html' %}
+    <div class="container-fluid page-body-wrapper">
+        {% include 'receiver_components/sidebar.html' %}
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-md-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="card-title">Barchasi</p>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table id="example" class="display expandable-table" style="width:100%">
+                                                <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>FISH</th>
+                                                    <th>Fakultet</th>
+                                                    <th>Yo'nalish</th>
+                                                    <th>Fan</th>
+                                                    <th>Status</th>
+                                                    <th>Amal</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for document in waiting_documents %}
+                                                    <tr>
+                                                        <td>{{ forloop.counter }}</td>
+
+                                                        <td>{{ document.user.first_name }} {{ document.user.last_name }}</td>
+                                                        <td>{{ document.user.faculty }}</td>
+
+                                                        <td>{{ document.user.field }}</td>
+                                                        <td>{{ document.subject }}</td>
+
+                                                        <td>
+                                                           <span class="badge bg-warning text-dark">Kutilmoqda</span>
+                                                        </td>
+                                                        <td><a href="#" ><i class="fa fa-eye"></i></a> <a href="#"><i class="fa fa-edit"></i></a></td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                            {% if not waiting_documents %}
+                                                <h4 class="text-center mt-3">Hech narsa yo'q</h4>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% include 'receiver_components/footer.html' %}
+{% endblock %}

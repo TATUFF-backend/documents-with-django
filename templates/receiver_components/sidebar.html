@@ -18,9 +18,9 @@
             <div class="collapse" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"><a class="nav-link" href="{% url 'receiver:all' %}">Barchasi</a></li>
-                    <li class="nav-item"><a class="nav-link" href="">Kutayotganlar</a></li>
-                    <li class="nav-item"><a class="nav-link" href="">Qabul qilinganlar</a></li>
-                    <li class="nav-item"><a class="nav-link" href="">Rad etilganlar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'receiver:waiting' %}">Kutayotganlar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'receiver:accepted' %}">Qabul qilinganlar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'receiver:cancelled' %}">Rad etilganlar</a></li>
                 </ul>
             </div>
         </li>
