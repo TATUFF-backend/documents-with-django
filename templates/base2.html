@@ -9,11 +9,59 @@
     </head>
     <body>
         <div class="container-scroller">
+            <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div id="liveToast{{ forloop.counter }}" class="toast align-items-center text-white bg-{{ message.tags }} border-0 position-relative" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="toast-body">
+                                {{ message }}
+                            </div>
+                            <div class="toast-progress"></div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
             {% block content %}
 
             {% endblock %}
-            <!-- page-body-wrapper ends -->
         </div>
         {% include '_components/script.html' %}
+        <script>
+            window.addEventListener('load', function () {
+                {% if messages %}
+                    {% for message in messages %}
+                        var toastLiveExample = document.getElementById('liveToast{{ forloop.counter }}');
+                        var toast = new bootstrap.Toast(toastLiveExample);
+                        toast.show();
+        
+                        setTimeout(function () {
+                            toast.hide();
+                        }, 3000)
+                    {% endfor %}
+                {% endif %}
+            });
+        </script>
+        <style>
+            
+            .toast-progress {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                height: 4px;
+                background-color: rgba(255, 255, 255, 0.7);
+                width: 100%;
+                animation: progress-animation 3s linear forwards;
+            }
+        
+            @keyframes progress-animation {
+                0% {
+                    width: 100%;
+                }
+                100% {
+                    width: 0;
+                }
+            }
+        </style>
     </body>
 </html>

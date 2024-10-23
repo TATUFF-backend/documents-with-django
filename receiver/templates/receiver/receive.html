@@ -129,7 +129,7 @@
                                     <form method="post" enctype="multipart/form-data">
                                         {% csrf_token %}
                                         <div class="mb-3">
-                                            <textarea style="font-size: 16px; padding: 13px" class="form-control" id="comment" name="comment" rows="4" placeholder="Fikringizni yozing..."></textarea>
+                                            <textarea style="font-size: 16px; padding: 13px" class="form-control" id="comment" name="comment" rows="4" placeholder="Fikringizni yozing..." required></textarea>
                                         </div>
 
                                         <div class="mb-3">
@@ -140,8 +140,8 @@
                                         <div class="mb-3">
                                             <label for="decision" class="form-label">Tanlang:</label>
                                             <select class="form-select" id="decision" name="decision">
-                                                <option value="accept">Qabul qilish</option>
-                                                <option value="reject">Rad etish</option>
+                                                <option value="accepted">Qabul qilish</option>
+                                                <option value="cancelled">Rad etish</option>
                                             </select>
                                         </div>
 
@@ -152,10 +152,71 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col stretch-card grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="card-title">Izohlar</p>
+                                <ul class="icon-data-list w-100">
+                                        <hr>
+                                    {% for comment in document.comment_set.all %}
+                                        <li>
+                                            <div>
+                                                <div class="row">
+                                                    <div class="col-md-5">
+                                                        <div class="d-flex mb-3 w-100">
+                                                            <img src="{{ comment.user.get_image }}" alt="no image"
+                                                                 style="width: 80px; height: 80px">
+                                                            <div class="d-flex flex-column align-items-start justify-content-center align-content-between"
+                                                                 style="height: 80px">
+                                                                <h3 class="mb-1">{{ comment.user.get_full_name }}</h3>
+                                                                <p class="mb-0">{{ comment.user.role }}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mb-3 w-100">
+                                                            <p><strong>Status:</strong>
+                                                                {% if comment.status == 'accepted' %}
+                                                                    <span class="badge bg-success">Qabul qilindi</span>
+                                                                {% elif comment.status == 'cancelled' %}
+                                                                    <span class="badge bg-danger">Rad etildi</span>
+                                                                {% endif %}
+                                                            </p>
+                                                            <p><strong>File:</strong>
+                                                                {% if comment.file %}
+                                                                    <span class="badge bg-primary">{{ comment.file|filename }}</span>
+                                                                {% else %}
+                                                                    <span class="badge bg-secondary">Fayl mavjud emas!</span>
+                                                                {% endif %}
+                                                            </p>
+                                                            <p><strong>Sana:</strong>
+                                                                <span class="badge bg-dark-subtle text-black">{{ comment.created_at|date:"M d, Y - H:i" }}</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-7">
+                                                        <h4>Sharh:</h4>
+                                                        <p class="form-control mb-1"
+                                                           style="font-size: 16px; line-height: 1.2">{{ comment.comment }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <hr>
+                                    {% empty %}
+                                        <p>Izohlar mavjud emas.</p>
+                                    {% endfor %}
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
     </div>
     {% include 'receiver_components/footer.html' %}
+
+
 
 {% endblock %}
