@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import View
 from shared.mixins import ReceiverMixin
 from user.models import (Document, DEPARTMENT, DEAN, PRORECTOR, STUDY_HEAD,
-                         WAITING, ACCEPTED, CANCELLED, NO_PROCESS)
+                         WAITING, ACCEPTED, CANCELLED, NO_PROCESS, Comment)
+from django.contrib import messages
 
 
 class DashboardView(ReceiverMixin, View):
@@ -136,15 +137,6 @@ class CancelledPageView(ReceiverMixin, View):
 
         return render(request, "receiver/cancelled.html", context=data)
 
-class DocumentDetailView(ReceiverMixin, View):
-    def get(self, request, pk):
-        document = Document.objects.get(pk=pk)
-        context = {
-            'title': f'{document.subject}',
-            'document': document,
-        }
-        return render(request, 'receiver/detail.html', context)
-
 
 class ReceiveDocumentView(ReceiverMixin, View):
     def get(self, request, pk):
@@ -162,5 +154,28 @@ class ReceiveDocumentView(ReceiverMixin, View):
         decision = request.POST.get('decision')
         file_upload = request.FILES.get('fileUpload')
 
-        print(comment)
+        if comment:
+            if user.role == DEPARTMENT:
+                document.document_comment = comment
+                if decision == 'accepted':
+                    document.department_head_sign = decision
+                    document.dean_sign = 'waiting'
+                document.department_head_sign = decision
+                document.save()
+                comment = Comment.objects.create(document=document, user=user, comment=comment, status=decision)
+                if file_upload:
+                    comment.file = file_upload
+                    comment.save()
+
+                if document.department_head_sign == ACCEPTED:
+                    messages.success(request, "Hujjat muvaffaqqiyatli qabul qilindi!")
+                else:
+                    messages.warning(request, "Hujjat muvaffaqqiyatli rad etildi!")
+
+                return redirect('receiver:all')
+
+
+
+
+
 

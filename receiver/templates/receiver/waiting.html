@@ -41,7 +41,7 @@
                                                         <td>
                                                            <span class="badge bg-warning text-dark">Kutilmoqda</span>
                                                         </td>
-                                                        <td><a href="#" ><i class="fa fa-eye"></i></a> <a href="#"><i class="fa fa-edit"></i></a></td>
+                                                        <td><a href="{% url 'receiver:receive' document.id %}"><i style="font-size: 20px" class="fa fa-edit"></i></a></td>
                                                     </tr>
                                                 {% endfor %}
                                                 </tbody>

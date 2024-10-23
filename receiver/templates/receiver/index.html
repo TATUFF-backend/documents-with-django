@@ -112,7 +112,7 @@
                                                         <td>
                                                             <span class="badge bg-warning text-dark">Kutilmoqda</span>
                                                         </td>
-                                                        <td><a href="{% url 'receiver:detail' document.id %}" ><i class="fa fa-eye"></i></a> <a href="{% url 'receiver:receive' document.id %}"><i class="fa fa-edit"></i></a></td>
+                                                        <td> <a class="btn btn-primary" href="{% url 'receiver:receive' document.id %}">Tekshirish</a> </td>
                                                     </tr>
                                                 {% endfor %}
                                                 </tbody>
