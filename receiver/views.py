@@ -155,8 +155,8 @@ class ReceiveDocumentView(ReceiverMixin, View):
         file_upload = request.FILES.get('fileUpload')
 
         if comment:
+            document.document_comment = comment
             if user.role == DEPARTMENT:
-                document.document_comment = comment
                 if decision == 'accepted':
                     document.department_head_sign = decision
                     document.dean_sign = 'waiting'
@@ -172,6 +172,64 @@ class ReceiveDocumentView(ReceiverMixin, View):
                 else:
                     messages.warning(request, "Hujjat muvaffaqqiyatli rad etildi!")
 
+                return redirect('receiver:all')
+
+            elif user.role == DEAN:
+                if decision == 'accepted':
+                    document.dean_sign = decision
+                    document.study_head_sign = 'waiting'
+                document.dean_sign = decision
+                document.save()
+                comment = Comment.objects.create(document=document, user=user, comment=comment, status=decision)
+                if file_upload:
+                    comment.file = file_upload
+                    comment.save()
+
+                if document.dean_sign == ACCEPTED:
+                    messages.success(request, "Hujjat muvaffaqqiyatli qabul qilindi!")
+                else:
+                    messages.warning(request, "Hujjat muvaffaqqiyatli rad etildi!")
+
+                return redirect('receiver:all')
+
+            elif user.role == STUDY_HEAD:
+                if decision == 'accepted':
+                    document.study_head_sign = decision
+                    document.study_prorector_sign = 'waiting'
+                document.study_head_sign = decision
+                document.save()
+                comment = Comment.objects.create(document=document, user=user, comment=comment, status=decision)
+                if file_upload:
+                    comment.file = file_upload
+                    comment.save()
+
+                if document.study_head_sign == ACCEPTED:
+                    messages.success(request, "Hujjat muvaffaqqiyatli qabul qilindi!")
+                else:
+                    messages.warning(request, "Hujjat muvaffaqqiyatli rad etildi!")
+
+                return redirect('receiver:all')
+
+            elif user.role == PRORECTOR:
+                if decision == 'accepted':
+                    document.study_prorector_sign = decision
+                    document.overall = decision
+                document.study_prorector_sign = decision
+                document.save()
+                comment = Comment.objects.create(document=document, user=user, comment=comment, status=decision)
+                if file_upload:
+                    comment.file = file_upload
+                    comment.save()
+
+                if document.study_prorector_sign == ACCEPTED:
+                    messages.success(request, "Hujjat muvaffaqqiyatli qabul qilindi!")
+                else:
+                    messages.warning(request, "Hujjat muvaffaqqiyatli rad etildi!")
+
+                return redirect('receiver:all')
+
+            else:
+                messages.warning(request, "Qandaydir xatolik mavjud!")
                 return redirect('receiver:all')
 
 
