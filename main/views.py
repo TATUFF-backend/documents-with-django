@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 
 from shared.mixins import TeacherMixin
-from user.models import Document, WAITING, CANCELLED, ACCEPTED
+from user.models import Document, WAITING, CANCELLED, ACCEPTED, NO_PROCESS
 from user.forms import DocumentForm
 
 
@@ -110,12 +110,26 @@ class DocumentUpdateView(TeacherMixin, View):
             if form.is_valid():
                 if 'sillabus_file' in request.FILES:
                     document.sillabus_file = request.FILES['sillabus_file']
-                if document.overall == 'cancelled':
-                    document.overall = 'waiting'
-                    document.department_head_sign = 'waiting' if document.department_head_sign == 'cancelled' else document.department_head_sign
-                    document.dean_sign = 'waiting' if document.dean_sign == 'cancelled' else document.dean_sign
-                    document.study_head_sign = 'waiting' if document.study_head_sign == 'cancelled' else document.study_head_sign
-                    document.study_prorector_sign = 'waiting' if document.study_prorector_sign == 'cancelled' else document.study_prorector_sign
+                if document.overall == CANCELLED:
+                    document.overall = WAITING
+                    document.department_head_sign = WAITING if document.department_head_sign == CANCELLED else document.department_head_sign
+                    document.dean_sign = WAITING if document.dean_sign == CANCELLED else document.dean_sign
+                    document.study_head_sign = WAITING if document.study_head_sign == CANCELLED else document.study_head_sign
+                    document.study_prorector_sign = WAITING if document.study_prorector_sign == CANCELLED else document.study_prorector_sign
+                    document.save()
+                if document.overall == NO_PROCESS and document.status == True:
+                    document.overall = WAITING
+                    document.department_head_sign = WAITING
+                    document.dean_sign = NO_PROCESS
+                    document.study_head_sign = NO_PROCESS
+                    document.study_prorector_sign = NO_PROCESS
+                    document.save()
+                if document.overall == WAITING and document.status == False:
+                    document.overall = NO_PROCESS
+                    document.department_head_sign = NO_PROCESS
+                    document.dean_sign = NO_PROCESS
+                    document.study_head_sign = NO_PROCESS
+                    document.study_prorector_sign = NO_PROCESS
                     document.save()
                 messages.success(request, "O'zgartirishlar muvaffaqiyatli saqlandi!")
                 form.save()

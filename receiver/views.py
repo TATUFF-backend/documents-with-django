@@ -155,12 +155,15 @@ class ReceiveDocumentView(ReceiverMixin, View):
         file_upload = request.FILES.get('fileUpload')
 
         if comment:
-            document.document_comment = comment
+            # document.document_comment = comment
             if user.role == DEPARTMENT:
                 if decision == 'accepted':
-                    document.department_head_sign = decision
+                    # document.department_head_sign = decision
                     document.dean_sign = 'waiting'
+                else:
+                    document.overall = CANCELLED
                 document.department_head_sign = decision
+
                 document.save()
                 comment = Comment.objects.create(document=document, user=user, comment=comment, status=decision)
                 if file_upload:
@@ -176,8 +179,10 @@ class ReceiveDocumentView(ReceiverMixin, View):
 
             elif user.role == DEAN:
                 if decision == 'accepted':
-                    document.dean_sign = decision
+                    # document.dean_sign = decision
                     document.study_head_sign = 'waiting'
+                else:
+                    document.overall = CANCELLED
                 document.dean_sign = decision
                 document.save()
                 comment = Comment.objects.create(document=document, user=user, comment=comment, status=decision)
@@ -194,8 +199,10 @@ class ReceiveDocumentView(ReceiverMixin, View):
 
             elif user.role == STUDY_HEAD:
                 if decision == 'accepted':
-                    document.study_head_sign = decision
+                    # document.study_head_sign = decision
                     document.study_prorector_sign = 'waiting'
+                else:
+                    document.overall = CANCELLED
                 document.study_head_sign = decision
                 document.save()
                 comment = Comment.objects.create(document=document, user=user, comment=comment, status=decision)
@@ -212,8 +219,10 @@ class ReceiveDocumentView(ReceiverMixin, View):
 
             elif user.role == PRORECTOR:
                 if decision == 'accepted':
-                    document.study_prorector_sign = decision
+                    # document.study_prorector_sign = decision
                     document.overall = decision
+                else:
+                    document.overall = CANCELLED
                 document.study_prorector_sign = decision
                 document.save()
                 comment = Comment.objects.create(document=document, user=user, comment=comment, status=decision)
